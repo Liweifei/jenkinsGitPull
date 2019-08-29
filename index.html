@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>server for lwf</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .top {
+    width: 1000px;
+    height: 44px;
+    position: fixed;
+    left: 50%;
+    margin-left: -500px;
+    top: 0;
+    background: #000;
+  }
+
+  .top button {
+    float: right;
+    height: 44px;
+  }
+
+  .main {
+    background: #ccc;
+    width: 1000px;
+    overflow: hidden;
+    margin: auto;
+    margin-top: 44px;
+  }
+
+  .main .li {
+    width: 100%;
+    height: 50px;
+  }
+</style>
+
+<body>
+  <input type="text" id="def">
+  <div class="top"><button>按钮1</button>
+    <button>按钮2</button>
+    <button>按钮3</button></div>
+  <div class="main">
+    <ul>
+      <li>第一条数据</li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+</body>
+
+</html>
+<script>
+  var arr = [{
+    "_id": "ddd",
+    "pid": "5d5f464355cd9b5dbc27ec0b",
+    "name": "啊啊啊啊啊",
+    "url": "/home/AppEditmenu",
+    "createDate": "2019-08-23T01:49:55.647Z",
+    "sort": 1566524995647
+  }, {
+    "_id": "ss",
+    "pid": "ddd",
+    "name": "啵啵啵啵啵啵宝宝",
+    "url": "/home/AppEditmenu",
+    "createDate": "2019-08-23T01:49:55.647Z",
+    "sort": 1566524995647
+  }, { "_id": "5d5e7274429a2517606b641f", "pid": "5d5e7253429a2517606b641e", "name": "菜单编辑", "url": "/home/AppEditmenu", "createDate": "2019-08-22T10:46:12.667Z", "sort": 1566470739372 }, { "_id": "5d5e7253429a2517606b641e", "pid": null, "name": "element-ui", "url": "/", "createDate": "2019-08-22T10:45:39.372Z", "sort": 1566470772667 }, { "_id": "5d5f464355cd9b5dbc27ec0b", "pid": "5d5e7253429a2517606b641e", "name": "图片上传", "url": "/home/AppEditmenu", "createDate": "2019-08-23T01:49:55.647Z", "sort": 1566524995647 }, { "_id": "5d5f496955cd9b5dbc27ec10", "pid": "5d5e7253429a2517606b641e", "name": "大飒飒东风", "url": "啊手动阀", "createDate": "2019-08-23T02:03:21.912Z", "sort": 1566525801912 }]
+  var data = [];
+  getParent();
+  function getParent() {//先把最顶层元素先找出来
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i];
+      if (!item.pid) {
+        item.children = [];
+        data.push(item);
+        arr.splice(i, 1);//找出来顶层元素后原数据删去相应的，就剩下是子元素
+        i--;
+      }
+    }
+  }
+  getChild(data, arr);//匹配子元素
+  function getChild(datas, arrs) {
+    for (var i = 0; i < datas.length; i++) {
+      var pItem = datas[i];
+      for (var j = 0; j < arrs.length; j++) {//循环对比子元素一遍
+        var item = arrs[j];
+        if (item.pid == pItem._id) {//如果是这层的子元素，则加进去
+          if (Array.isArray(pItem.children)) {
+            pItem.children.push(item);
+          } else {
+            pItem.children = [item];
+          }
+          arrs.splice(j, 1);//再删去已经加处理好的子元素，最后剩下别的子/子子元素
+          j--;
+        }
+      }
+      if (arrs.length > 0) {//如果发现再对比一次也发现还剩下元素
+        if (Array.isArray(pItem.children) && pItem.children.length > 0) {//如果有子元素，那就对比是否是子子元素，否则就循环外层的对比
+          getChild(pItem.children, arrs)
+        }
+      }
+    }
+
+  }
+  console.log(data);
+
+  var def=document.getElementById("def");
+  var obj={};
+  Object.defineProperty(obj,"def",{
+    get:function(){
+      console.log("getter")
+    },
+    set(val){
+      console.log("setter")
+
+    }
+  })
+  def.onkeyup=function(e){
+    console.log(e.target.value);
+    obj.def=e.target.value;
+  }
+  console.log(obj.def)
+</script>
